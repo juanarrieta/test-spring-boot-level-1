@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cuenta Corriente</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-resource.js"></script>
+	<script type="text/javascript" src="../js/app.js"></script>
+	<script type="text/javascript" src="../controllers/cuenta_corriente.controller.js"></script>
+	<script type="text/javascript" src="../js/titular_fisico.service.js"></script>
+	<script type="text/javascript" src="../js/titular_juridico.service.js"></script>
+	<script type="text/javascript" src="../js/cuenta_corriente.service.js"></script>
+	<script type="text/javascript" src="../js/movimiento.service.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/cuenta_corriente.js"></script>
+</head>
+<body ng-app="GestionApp" ng-controller="CuentaCorrienteController">
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Gestion de cuentas</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="http://localhost:8080/app/view/titulares.html?#">Titular</a></li>
+	      <li class="active"><a href="http://localhost:8080/app/view/cuenta_corriente.html?#">Cuenta Corriente</a></li>
+	      <li><a href="http://localhost:8080/app/view/movimiento.html?#">Movimientos</a></li>
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+	      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Tecso</a></li>
+	      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Exit</a></li>
+	    </ul>
+	  </div>
+	</nav>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<form class="col-md-4" ng-submit="saveCuenta()">
+				<div class="form-group">
+					<label for="tipo">Tipo de titular</label> 
+				 	<select ng-model="tipo" id="tipo" style="width: 100%;" ng-change="change()">
+					 	<option value="1">Titular fisico</option>
+					  	<option value="2">Titular juridico</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="titular">Seleccione titular</label> 
+				 	<select ng-model="titular" id="titular" style="width: 100%;">
+					 	<option ng-repeat="titu in titulares" value="{{titu.rut}}">{{titu.nombre}}{{titu.razon_social}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="cuentaNum">Numero de cuenta</label> 
+					<input type="text" ng-model="cuenta.num_cuenta" class="form-control"
+						id="cuentaNum" placeholder="Digite numero de cuenta">
+				</div>
+				<div class="form-group">
+					<label for="cuentaMoneda">Moneda</label> 
+					<select ng-model="cuenta.moneda" id="cuentaMoneda" style="width: 100%;">
+					 	<option value="peso">Peso</option>
+					  	<option value="dolar">Dolar</option>
+					  	<option value="euro">Euro</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="cuentaSaldo">Saldo</label> 
+					<input type="number" ng-model="cuenta.saldo" class="form-control"
+						id="cuentaSaldo" step="0.01" placeholder="Digite saldo inicial">
+				</div>
+				
+				<button type="submit" class="btn btn-default" style="width: 100%;">Crear</button>			
+			</form>
+
+			<div class="table-responsive col-md-8">
+				<table id="tbl_cuentas" class="table table-striped">
+					<tr>
+						<th>Numero de cuenta</th>
+						<th>Moneda</th>
+						<th>Saldo</th>
+						<th>Acciones</th>
+					</tr>
+					<tr ng-repeat="cuenta in cuentas">
+						<td>{{cuenta.num_cuenta}}</td>
+						<td>{{cuenta.moneda}}</td>
+						<td>{{cuenta.saldo | number:2}}</td>
+						<td>
+							<button type="button" class="btn btn-default"
+								ng-click="deleteCuenta(cuenta)">
+								<span class="glyphicon glyphicon-remove-circle"
+									aria-hidden="true"></span>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
